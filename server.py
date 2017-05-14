@@ -3,8 +3,7 @@ from engine import Engine
 class Server:
     def __init__(self):
         import socket
-        # port = input("PORT Server : ")
-        port = 15556
+        port = int(input("PORT Server (15555): ") or 15555)
 
         self.mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.mySocket.bind(('', port))
@@ -12,7 +11,7 @@ class Server:
 
         self.client = None
 
-        print("Server started")
+        print("Server started with port: " + str(port))
         while self.client is None:
             self.client, address = self.mySocket.accept()
             print("{} connected".format(address))

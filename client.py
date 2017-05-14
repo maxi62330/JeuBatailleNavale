@@ -5,13 +5,13 @@ class Client:
     def __init__(self):
         import socket
 
-        # configuration dev
-        hote = "localhost"
-        port = 15556
+
+        hote = input("Server Name (localhost):") or "localhost"
+        port = int(input("PORT Server (15555): ") or "15555")
 
         self.mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.mySocket.connect((hote, port))
-        print("Connection on {}".format(port))
+        print("Connection on {} with port {}".format(hote , port))
 
         # On attend l'initialisation du coté server -> "OK"
         listen = True
