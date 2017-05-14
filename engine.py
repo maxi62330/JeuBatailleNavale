@@ -50,10 +50,15 @@ class Engine:
         for x in range(10):
             line = alpha[x]
             for y in range(10):
-                if myBoard.grid[x][y].name != "-":
-                    line = line + " " + myBoard.grid[x][y].name
+                if myBoard.grid[x][y].name != "-" :
+                    if myBoard.grid[x][y].state != "-":
+                        line = line + " XX"
+                    else:
+                        line = line + " " + myBoard.grid[x][y].name
                 else:
                     line = line + " " + myBoard.grid[x][y].state + " "
+
+
 
             line = line + "                   " + alpha[x]
             for y in range(10):
