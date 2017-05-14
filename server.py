@@ -6,32 +6,27 @@ class Server:
         # port = input("PORT Server : ")
         port = 15556
 
-        socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        socket.bind(('', port))
-        socket.listen(5)
+        self.mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.mySocket.bind(('', port))
+        self.mySocket.listen(5)
 
         self.client = None
 
         print("Server started")
         while True:
             if self.client is None:
-                self.client, address = socket.accept()
+                self.client, address = self.mySocket.accept()
                 print("{} connected".format(address))
                 #self.client.send(b"OK")
                 self.sendDataOnFlux("OK")
             else:
-                self #Engine.play(self, "SERVEUR", False, Server)
+                Engine.play(self, "SERVEUR", False, self)
 
-        client.close()
-
+        self.client.close()
         print("Close")
-        socket.close()
 
     def sendDataOnFlux(self, message):
         self.client.send(message.encode())
 
     def listenFlux(self):
-        return self.mySocket.recv(255).decode()
-
-
-
+        return self.client.recv(255).decode()

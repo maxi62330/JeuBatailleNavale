@@ -5,8 +5,6 @@ class Client:
     def __init__(self):
         import socket
 
-        serverPlay = False
-
         # configuration dev
         hote = "localhost"
         port = 15556
@@ -25,17 +23,16 @@ class Client:
                 print("Initialisation avec le serveur établi")
                 listen = False
 
-        #Engine.play(self, "CLIENT", True, Client)
+        #while True:
+            # TODO : While != G
+        Engine.play(self, "CLIENT", True, self)
+
 
         print("Close")
-        self.mySocket.close()
+        #self.mySocket.close()
 
     def sendDataOnFlux(self, message):
         self.mySocket.send(message.encode())
 
     def listenFlux(self):
         return self.mySocket.recv(255).decode()
-
-
-
-
