@@ -66,7 +66,7 @@ class Engine:
             print(line)
 
     def play(self, name, iAmClient, parent):
-        print("I am {}, and {}", name, iAmClient)
+        print("I am {}, and {}".format(name, iAmClient))
         listBoardDestroy = []
         myGrid = Board()
         foeGrid = Board()
@@ -102,7 +102,7 @@ class Engine:
 
                     if responseBombardement == "G":
                         print("Félicitation, Vous avez gagné")
-                        currentGame = False;
+                        currentGame = False
                         break
 
             else:
@@ -121,7 +121,7 @@ class Engine:
                         myTurn = True
                     elif resultBombard == "G":
                         print("L'adversaire a gagné")
-                        currentGame = False;
+                        currentGame = False
                         break
 
                 else:
@@ -136,8 +136,6 @@ class Engine:
     def traitmentBombard(self, myGrid, coordinates, listBoardDestroy):
         # On récupère la cellule qui à été bombarder
         cell = myGrid.grid[Engine.format_x(coordinates[0])][Engine.format_y(coordinates[1:])]
-
-        resultBombard = "R" # Par défaut le bombardement à ratée
 
         # On regarde si on à été touché
         if(cell.name != "-"):
@@ -175,8 +173,6 @@ class Engine:
 
         if (NbTouchOnMyBoard == 4 and nameBoard[0] == "P") or (NbTouchOnMyBoard == 3 and nameBoard[0] == "C") or (
                         NbTouchOnMyBoard == 2 and nameBoard[0] == "S"):
-
-            # Mon bateau est coulé
             return True
         else:
             return False
