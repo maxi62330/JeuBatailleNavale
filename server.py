@@ -13,14 +13,12 @@ class Server:
         self.client = None
 
         print("Server started")
-        while True:
-            if self.client is None:
-                self.client, address = self.mySocket.accept()
-                print("{} connected".format(address))
-                #self.client.send(b"OK")
-                self.sendDataOnFlux("OK")
-            else:
-                Engine.play(self, "SERVEUR", False, self)
+        while self.client is None:
+            self.client, address = self.mySocket.accept()
+            print("{} connected".format(address))
+            self.sendDataOnFlux("OK")
+
+        Engine.play(self, "SERVEUR", False, self)
 
         self.client.close()
         print("Close")

@@ -43,7 +43,7 @@ class Engine:
         return positionBombardement
 
     def printBoard(myBoard, foeBoard):
-        alpha = ["A", "B", "C", "D", "F", "G", "H", "I", "J", "K"]
+        alpha = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J",]
         print("  Grille Joueur                                     Grille Adversaire")
         print("  1  2  3  4  5  6  7  8  9 10                      1 2 3 4 5 6 7 8 9 10")
 
@@ -67,13 +67,15 @@ class Engine:
 
     def play(self, name, iAmClient, parent):
         print("I am {}, and {}", name, iAmClient)
+        listBoardDestroy = []
         myGrid = Board()
         foeGrid = Board()
 
         Engine.fillBoard(self,"bateauPosition.txt" , myGrid)
 
         myTurn = iAmClient
-        while True:
+        currentGame = True
+        while currentGame:
 
             if(myTurn):
                 # Si c'est à mon tour de jouer
@@ -98,6 +100,11 @@ class Engine:
                     # On modifie la grille de l'adversaire
                     foeGrid.grid[Engine.format_x(coordinates[0])][Engine.format_y(coordinates[1:])].state = responseBombardement
 
+                    if responseBombardement == "G":
+                        print("Félicitation, Vous avez gagné")
+                        currentGame = False;
+                        break
+
             else:
                 # c'est au tour de l'adversaire
                 coordinatesBombardement = parent.listenFlux()
@@ -105,16 +112,16 @@ class Engine:
 
                 if (0 <= Engine.format_x(coordinatesBombardement[0]) < 11) and (0 < int(coordinatesBombardement[1:]) < 11):
 
-                    resultBombard = Engine.traitmentBombard(Engine, myGrid, coordinatesBombardement)
+                    resultBombard = Engine.traitmentBombard(Engine, myGrid, coordinatesBombardement, listBoardDestroy)
 
                     parent.sendDataOnFlux(resultBombard)
                     print("L'adversaire m'a " + resultBombard)
                     myGrid.grid[Engine.format_x(coordinatesBombardement[0])][Engine.format_y(coordinatesBombardement[1:])].state = resultBombard
-                    # grilleJoueur.grille[Util.format_x(response.decode()[0])][Util.format_y(response.decode()[1:])].name = ""
                     if resultBombard == "R": # Si l'adversaire m'a raté alors c'est à mon tour
                         myTurn = True
                     elif resultBombard == "G":
                         print("L'adversaire a gagné")
+                        currentGame = False;
                         break
 
                 else:
@@ -126,7 +133,7 @@ class Engine:
             Engine.printBoard(myGrid, foeGrid)
             print("Attente de réponse")
 
-    def traitmentBombard(self, myGrid, coordinates):
+    def traitmentBombard(self, myGrid, coordinates, listBoardDestroy):
         # On récupère la cellule qui à été bombarder
         cell = myGrid.grid[Engine.format_x(coordinates[0])][Engine.format_y(coordinates[1:])]
 
@@ -140,22 +147,12 @@ class Engine:
 
         if(Engine.verifyBoardIsNotDied(Engine,myGrid,cell.name)):
             cell.state = "C"
-            # TODO:  Modifier toute les status du bateau
-            # TODO : Ajouter le nom du bateau à une liste de bateau coulée
+            if listBoardDestroy.count(cell.name) != 1:
+                listBoardDestroy.append(cell.name)
 
+            if len(listBoardDestroy) == 6:
+                cell.state = "G"
 
-        """
-         self.changerEtatBateau(self, grilleJoueur, positionGrille.name, "C")
-            retour = "C"
-            self.bateauCoulee += 1
-
-        # On regarde si la partie est fini
-        if self.bateauCoulee == 6:
-            retour = "G"
-
-            print("Gagné")
-            
-        """
         return cell.state
 
 
@@ -176,8 +173,8 @@ class Engine:
         NbTouchOnMyBoard = Engine.countBoardTouchWithSameName(self, myGrid, nameBoard)
 
 
-        if (NbTouchOnMyBoard == 4 and nameBoard == "P") or (NbTouchOnMyBoard == 3 and nameBoard == "C") or (
-                        NbTouchOnMyBoard == 2 and nameBoard == "S"):
+        if (NbTouchOnMyBoard == 4 and nameBoard[0] == "P") or (NbTouchOnMyBoard == 3 and nameBoard[0] == "C") or (
+                        NbTouchOnMyBoard == 2 and nameBoard[0] == "S"):
 
             # Mon bateau est coulé
             return True

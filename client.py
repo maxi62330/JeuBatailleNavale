@@ -23,13 +23,11 @@ class Client:
                 print("Initialisation avec le serveur établi")
                 listen = False
 
-        #while True:
-            # TODO : While != G
         Engine.play(self, "CLIENT", True, self)
 
 
         print("Close")
-        #self.mySocket.close()
+        self.mySocket.close()
 
     def sendDataOnFlux(self, message):
         self.mySocket.send(message.encode())
